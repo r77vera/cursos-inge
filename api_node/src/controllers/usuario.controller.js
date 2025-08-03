@@ -1,33 +1,48 @@
-const { Usuario } = require('../models');
+const usuarioService = require('../services/usuario.service');
 
 module.exports = {
   async getAll(req, res) {
-    const usuarios = await Usuario.findAll();
-    res.json(usuarios);
+    try {
+      const usuarios = await usuarioService.getAll();
+      res.json(usuarios);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   },
 
   async getById(req, res) {
-    const usuario = await Usuario.findByPk(req.params.id);
-    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
-    res.json(usuario);
+    try {
+      const usuario = await usuarioService.getById(req.params.id);
+      res.json(usuario);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
   },
 
   async create(req, res) {
-    const nuevo = await Usuario.create(req.body);
-    res.status(201).json(nuevo);
+    try {
+      const nuevo = await usuarioService.create(req.body);
+      res.status(201).json(nuevo);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
   },
 
   async update(req, res) {
-    const usuario = await Usuario.findByPk(req.params.id);
-    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
-    await usuario.update(req.body);
-    res.json(usuario);
+    try {
+      const usuario = await usuarioService.update(req.params.id, req.body);
+      res.json(usuario);
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
   },
 
   async delete(req, res) {
-    const usuario = await Usuario.findByPk(req.params.id);
-    if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
-    await usuario.destroy();
-    res.status(204).send();
+    try {
+      await usuarioService.remove(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
   }
 };

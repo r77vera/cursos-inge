@@ -1,37 +1,31 @@
-const { Venta, DetalleVenta, Cliente, Usuario, ComprobanteTipo, Producto } = require('../models');
+const ventaService = require('../services/venta.service');
 
 module.exports = {
     async getAll(req, res) {
-        const ventas = await Venta.findAll({
-            include: [
-                { model: Cliente },
-                { model: Usuario },
-                { model: ComprobanteTipo },
-                { model: DetalleVenta, include: [Producto] }
-            ]
-        });
-        res.json(ventas);
+        try {
+            const ventas = await ventaService.getAll();
+            res.json(ventas);
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
     },
 
     async getById(req, res) {
-        const venta = await Venta.findByPk(req.params.id, {
-            include: [
-                { model: Cliente },
-                { model: Usuario },
-                { model: ComprobanteTipo },
-                { model: DetalleVenta, include: [Producto] }
-            ]
-        });
-        if (!venta) return res.status(404).json({ message: 'Venta no encontrada' });
-        res.json(venta);
+        try {
+            const venta = await ventaService.getById(req.params.id);
+            res.json(venta);
+        } catch (err) {
+            res.status(404).json({ message: err.message });
+        }
     },
 
     async create(req, res) {
-        const { detalles, ...ventaData } = req.body;
-
-        const venta = await Venta.create(ventaData);
-        const detallesGuardados = await Promise.all(detalles.map(d => DetalleVenta.create({ ...d, venta_id: venta.id })));
-
-        res.status(201).json({ venta, detalles: detallesGuardados });
+        try {
+            const { detalles, ...ventaData } = req.body;
+            const resultado = await ventaService.create(ventaData, detalles);
+            res.status(201).json(resultado);
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+        }
     }
 };

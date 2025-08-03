@@ -1,33 +1,48 @@
-const { Cliente, DocumentoTipo } = require('../models');
+const clienteService = require('../services/cliente.service');
 
 module.exports = {
   async getAll(req, res) {
-    const clientes = await Cliente.findAll({ include: [DocumentoTipo] });
-    res.json(clientes);
+    try {
+      const clientes = await clienteService.getAll();
+      res.json(clientes);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
   },
 
   async getById(req, res) {
-    const cliente = await Cliente.findByPk(req.params.id, { include: [DocumentoTipo] });
-    if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-    res.json(cliente);
+    try {
+      const cliente = await clienteService.getById(req.params.id);
+      res.json(cliente);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   },
 
   async create(req, res) {
-    const nuevo = await Cliente.create(req.body);
-    res.status(201).json(nuevo);
+    try {
+      const nuevo = await clienteService.create(req.body);
+      res.status(201).json(nuevo);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
   },
 
   async update(req, res) {
-    const cliente = await Cliente.findByPk(req.params.id);
-    if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-    await cliente.update(req.body);
-    res.json(cliente);
+    try {
+      const cliente = await clienteService.update(req.params.id, req.body);
+      res.json(cliente);
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   },
 
   async delete(req, res) {
-    const cliente = await Cliente.findByPk(req.params.id);
-    if (!cliente) return res.status(404).json({ message: 'Cliente no encontrado' });
-    await cliente.destroy();
-    res.status(204).send();
+    try {
+      await clienteService.remove(req.params.id);
+      res.status(204).send();
+    } catch (err) {
+      res.status(404).json({ message: err.message });
+    }
   }
 };

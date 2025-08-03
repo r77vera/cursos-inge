@@ -4,7 +4,7 @@ const { autenticarToken } = require('../middlewares/auth.middleware')
 
 router.use('/auth', require('./auth.routes'));
 
-router.use('/usuarios', autenticarToken, require('./ventas.routes'));
+router.use('/usuarios', autenticarToken, require('./usuarios.routes'));
 router.use('/clientes', autenticarToken, require('./clientes.routes'));
 router.use('/tipoDocumento', autenticarToken, require('./documentoTipo.routes'));
 router.use('/ventas', autenticarToken, require('./ventas.routes'));
