@@ -1,14 +1,14 @@
 {
     "info": {
-        "name": "Sistema Ventas API v3",
-        "description": "API REST del Sistema de Ventas con autenticación JWT",
+        "name": "Sistema Ventas API",
+        "description": "Colección de endpoints para el Sistema de Ventas con autenticación JWT",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-        "version": "3.0.0"
+        "version": "1.0.0"
     },
     "item": [
         {
             "name": "Auth",
-            "description": "Endpoints de autenticación",
+            "description": "Endpoints de autenticación y registro",
             "item": [
                 {
                     "name": "Register",
@@ -28,7 +28,8 @@
                             "raw": "{{base_url}}/auth/register",
                             "host": ["{{base_url}}"],
                             "path": ["auth", "register"]
-                        }
+                        },
+                        "description": "Registra un nuevo usuario en el sistema"
                     }
                 },
                 {
@@ -63,13 +64,15 @@
                             "raw": "{{base_url}}/auth/authenticate",
                             "host": ["{{base_url}}"],
                             "path": ["auth", "authenticate"]
-                        }
+                        },
+                        "description": "Autentica un usuario y devuelve un token JWT"
                     }
                 }
             ]
         },
         {
             "name": "Productos",
+            "description": "Gestión de productos",
             "item": [
                 {
                     "name": "Listar Productos",
@@ -85,7 +88,8 @@
                             "raw": "{{base_url}}/productos",
                             "host": ["{{base_url}}"],
                             "path": ["productos"]
-                        }
+                        },
+                        "description": "Obtiene la lista de todos los productos"
                     }
                 },
                 {
@@ -102,7 +106,8 @@
                             "raw": "{{base_url}}/productos/1",
                             "host": ["{{base_url}}"],
                             "path": ["productos", "1"]
-                        }
+                        },
+                        "description": "Obtiene un producto por su ID"
                     }
                 },
                 {
@@ -127,13 +132,59 @@
                             "raw": "{{base_url}}/productos",
                             "host": ["{{base_url}}"],
                             "path": ["productos"]
-                        }
+                        },
+                        "description": "Crea un nuevo producto"
+                    }
+                },
+                {
+                    "name": "Actualizar Producto",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Producto Actualizado\",\n    \"descripcion\": \"Nueva descripción\",\n    \"precio\": 150.00,\n    \"stock\": 75\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/productos/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["productos", "1"]
+                        },
+                        "description": "Actualiza un producto existente"
+                    }
+                },
+                {
+                    "name": "Eliminar Producto",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/productos/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["productos", "1"]
+                        },
+                        "description": "Elimina un producto por su ID"
                     }
                 }
             ]
         },
         {
             "name": "Ventas",
+            "description": "Gestión de ventas",
             "item": [
                 {
                     "name": "Listar Ventas",
@@ -149,7 +200,26 @@
                             "raw": "{{base_url}}/ventas",
                             "host": ["{{base_url}}"],
                             "path": ["ventas"]
-                        }
+                        },
+                        "description": "Obtiene la lista de todas las ventas"
+                    }
+                },
+                {
+                    "name": "Obtener Venta",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/ventas/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["ventas", "1"]
+                        },
+                        "description": "Obtiene una venta por su ID"
                     }
                 },
                 {
@@ -168,13 +238,82 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"clienteId\": 1,\n    \"items\": [\n        {\n            \"productoId\": 1,\n            \"cantidad\": 2\n        }\n    ]\n}"
+                            "raw": "{\n    \"clienteId\": 1,\n    \"items\": [\n        {\n            \"productoId\": 1,\n            \"cantidad\": 2\n        },\n        {\n            \"productoId\": 2,\n            \"cantidad\": 1\n        }\n    ]\n}"
                         },
                         "url": {
                             "raw": "{{base_url}}/ventas",
                             "host": ["{{base_url}}"],
                             "path": ["ventas"]
-                        }
+                        },
+                        "description": "Registra una nueva venta"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Clientes",
+            "description": "Gestión de clientes",
+            "item": [
+                {
+                    "name": "Listar Clientes",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/clientes",
+                            "host": ["{{base_url}}"],
+                            "path": ["clientes"]
+                        },
+                        "description": "Obtiene la lista de todos los clientes"
+                    }
+                },
+                {
+                    "name": "Obtener Cliente",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/clientes/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["clientes", "1"]
+                        },
+                        "description": "Obtiene un cliente por su ID"
+                    }
+                },
+                {
+                    "name": "Crear Cliente",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Juan Pérez\",\n    \"email\": \"juan@example.com\",\n    \"telefono\": \"123456789\",\n    \"direccion\": \"Calle Principal 123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/clientes",
+                            "host": ["{{base_url}}"],
+                            "path": ["clientes"]
+                        },
+                        "description": "Crea un nuevo cliente"
                     }
                 }
             ]
@@ -183,7 +322,7 @@
     "variable": [
         {
             "key": "base_url",
-            "value": "http://localhost:3000",
+            "value": "http://localhost:8080",
             "type": "string"
         }
     ],
