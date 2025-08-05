@@ -10,14 +10,23 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
 
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await fakeLogin(username, password);
-    if (user) {
-      login(user);
-      router.push("/dashboard");
-    } else {
-      alert("Credenciales incorrectas");
+    setError("");
+    try {
+      const user = await fakeLogin(username, password);
+      if (user) {
+        login(user);
+        // Usar replace en lugar de push para evitar problemas de historial
+        router.replace("/dashboard");
+      } else {
+        setError("Credenciales incorrectas. Prueba con: admin/1234, vendedor/1234 o cliente/1234");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Error al iniciar sesión. Por favor, intenta de nuevo.");
     }
   };
 
