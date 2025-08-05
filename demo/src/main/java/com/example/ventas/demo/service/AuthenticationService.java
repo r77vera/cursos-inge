@@ -4,6 +4,7 @@ import com.example.ventas.demo.model.dto.AuthenticationRequest;
 import com.example.ventas.demo.model.dto.AuthenticationResponse;
 import com.example.ventas.demo.model.dto.RegisterRequest;
 import com.example.ventas.demo.model.entity.Usuario;
+import com.example.ventas.demo.mapper.UsuarioMapper;
 import com.example.ventas.demo.repository.UsuarioRepository;
 import com.example.ventas.demo.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,8 @@ public class AuthenticationService {
     private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+        private final AuthenticationManager authenticationManager;
+    private final UsuarioMapper usuarioMapper;
 
     public AuthenticationResponse register(RegisterRequest request) {
         if (repository.existsByEmail(request.getEmail())) {
@@ -36,6 +38,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .usuario(usuarioMapper.toDto(user))
                 .build();
     }
 
@@ -51,6 +54,7 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .usuario(usuarioMapper.toDto(user))
                 .build();
     }
 }

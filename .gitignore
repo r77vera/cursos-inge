@@ -1,2 +1,5 @@
 /api_node/node_modules/
 /api_node/.env
+/frontend/node_modules/
+/frontend/.env
+/.vscode/
